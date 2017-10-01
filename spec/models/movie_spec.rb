@@ -24,8 +24,8 @@ describe 'Movie' do
     end
 
     it 'has a director' do
-      movie.director = "The Wachowski Sisters"
-      expect(movie.director).to eq("The Wachowski Sisters")
+      movie.director = "The Wachowski Brothers"
+      expect(movie.director).to eq("The Wachowski Brothers")
     end
 
     it 'has a lead actor/actress' do
@@ -35,7 +35,7 @@ describe 'Movie' do
 
     it 'has an in theaters flag' do
       movie.in_theaters = false
-      expect(movie.in_theaters?).to be_falsey
+      expect(movie.in_theaters).to eq(false)
     end
   end
 
@@ -65,12 +65,15 @@ describe 'Movie' do
       end
 
       it 'can be created with a hash of attributes' do
-        movie = can_be_created_with_a_hash_of_attributes
+        movie = can_be_created_with_a_hash_of_attributes(attributes)
+
         expect(Movie.find_by(attributes)).to eq(movie)
       end
 
       it 'can be created in a block' do
-        movie = can_be_created_in_a_block
+        title = "Home Alone"
+        year  = 1990
+        movie = can_be_created_in_a_block(title, year)
 
         expect(Movie.last).to eq(movie)
         expect(Movie.last.title).to eq("Home Alone")
@@ -124,7 +127,12 @@ describe 'Movie' do
       end
 
       it 'can be updated using #update' do
+        Movie.create(title: "Wat?")
+        movie = Movie.find_by(title: "Wat?")
+        movie.update(title: "Wat, huh?")
+
         can_update_using_update_method
+
         expect(Movie.find_by(title: "Wat, huh?")).to_not be_nil
       end
 
